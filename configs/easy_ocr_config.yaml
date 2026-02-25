@@ -1,0 +1,38 @@
+
+experiment_name: arabic_easyocr_adadelta
+train_data: easyocr_data/train_d2  # Use the valid d2 dataset
+valid_data: easyocr_data/val
+select_data: /
+batch_ratio: "1.0"
+total_data_usage_ratio: 1.0
+batch_size: 24
+valInterval: 2000
+saved_model: ''
+FT: False
+optim: adadelta
+lr: 1.0
+
+# Image parameters
+imgH: 64
+imgW: 640
+rgb: False  # Grayscale
+PAD: True
+
+# Model architecture
+Transformation: TPS
+FeatureExtraction: ResNet
+SequenceModeling: BiLSTM
+Prediction: Attn
+num_fiducial: 20
+input_channel: 1
+output_channel: 512
+hidden_size: 256
+
+# Characters
+character: " !\"#$%&'()*+,-./0123456789:=?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|«º»ÁÃÈÉÊÑÓÚàáãçèéê،؛؟ءآأؤإئابةتثجحخدذرزسشصضطظعغـفقكلمنهوىئًٌٍَُِّْ٠١٢٣٤٥٦٧٨٩ٰپچڈژڤڨکگںھۀہۃیے۰۱۲۳۴۵۶۷۹–—’„•…●⸗ﭬﮋﱣ﴿ﷲ"
+
+# Data processing
+batch_max_length: 192  # Same as MMOCR
+sensitive: True # Case sensitive (as extracted chars include uppercase)
+data_filtering_off: True
+workers: 4

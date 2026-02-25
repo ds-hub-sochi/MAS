@@ -1,0 +1,171 @@
+Global:
+  # Base model family (kept for reference / inference export)
+  model_name: arabic_PP-OCRv5_mobile_rec
+  debug: false
+  use_gpu: true
+
+  # Training schedule
+  epoch_num: 30
+  log_smooth_window: 20
+  print_batch_step: 10
+
+  # Output dirs
+  save_model_dir: ./output/my_arabic_rec_mas+muharaf
+  save_epoch_step: 1
+  eval_batch_step: [0, 130]
+  cal_metric_during_train: true
+
+  # >>> IMPORTANT: put the real path to pretrained .pdparams here <<<
+  # Example:
+  # pretrained_model: ./pretrained/arabic_PP-OCRv5_mobile_rec.pdparams
+  pretrained_model: ./pretrained/arabic_PP-OCRv5_mobile_rec.pdparams
+  checkpoints:
+  save_inference_dir:
+
+  use_visualdl: false
+  infer_img:
+  infer_mode: false
+
+  # >>> IMPORTANT: your generated dict (arabic historical charset) <<<
+  character_dict_path: /home/jovyan/people/murtazin/PaddleOCR/datasets/dict_mas_muharaf.txt
+  use_space_char: true
+
+  # Sequence length / shapes
+  max_text_length: &max_text_length 192
+  d2s_train_image_shape: [3, 48, 640]
+
+  distributed: false
+  save_res_path: ./output/rec/predicts_arabic_ppocrv5.txt
+
+
+Optimizer:
+  name: Adam
+  beta1: 0.9
+  beta2: 0.999
+  lr:
+    name: Cosine
+    learning_rate: 0.0005
+    warmup_epoch: 5
+  regularizer:
+    name: L2
+    factor: 3.0e-05
+
+
+Architecture:
+  model_type: rec
+  algorithm: SVTR_LCNet
+  Transform:
+  Backbone:
+    name: PPLCNetV3
+    scale: 0.95
+  Head:
+    name: MultiHead
+    head_list:
+      - CTCHead:
+          Neck:
+            name: svtr
+            dims: 120
+            depth: 2
+            hidden_dims: 120
+            kernel_size: [1, 3]
+            use_guide: True
+          Head:
+            fc_decay: 0.00001
+      - NRTRHead:
+          nrtr_dim: 384
+          max_text_length: *max_text_length
+
+
+Loss:
+  name: MultiLoss
+  loss_config_list:
+    - CTCLoss:
+    - NRTRLoss:
+
+
+PostProcess:
+  name: CTCLabelDecode
+
+
+Metric:
+  name: RecMetric
+  main_indicator: norm_edit_dis
+  ignore_space: False
+
+
+Train:
+  dataset:
+    name: MultiScaleDataSet
+    ds_width: false
+
+    # We use absolute paths inside train_list.txt, so data_dir can be any existing folder
+    data_dir: /
+    ext_op_transform_idx: 1
+
+    # >>> IMPORTANT: your prepared PaddleOCR REC lists <<<
+    label_file_list:
+      - /home/jovyan/people/murtazin/PaddleOCR/datasets/train_list_merged_with_muharaf.txt
+
+    transforms:
+      - DecodeImage:
+          img_mode: BGR
+          channel_first: false
+      # - RecConAug:
+      #     prob: 0.5
+      #     ext_data_num: 2
+      #     image_shape: [48, 320, 3]
+      #     max_text_length: *max_text_length
+      - RecAug:
+      - MultiLabelEncode:
+          gtc_encode: NRTRLabelEncode
+      - KeepKeys:
+          keep_keys:
+            - image
+            - label_ctc
+            - label_gtc
+            - length
+            - valid_ratio
+
+  sampler:
+    name: MultiScaleSampler
+    scales: [[640, 48]] 
+    first_bs: &bs 128
+    fix_bs: true
+    divided_factor: [8, 16]  # w, h
+    is_training: True
+
+  loader:
+    shuffle: true
+    batch_size_per_card: *bs
+    drop_last: true
+    num_workers: 32
+
+
+Eval:
+  dataset:
+    name: SimpleDataSet
+    data_dir: /
+    label_file_list:
+      - /home/jovyan/people/murtazin/PaddleOCR/datasets/val_list.txt
+
+    transforms:
+      - DecodeImage:
+          img_mode: BGR
+          channel_first: false
+      - MultiLabelEncode:
+          gtc_encode: NRTRLabelEncode
+      - RecResizeImg:
+          image_shape: [3, 48, 640]
+      - KeepKeys:
+          keep_keys:
+            - image
+            - label_ctc
+            - label_gtc
+            - length
+            - valid_ratio
+
+  loader:
+    shuffle: true
+    drop_last: false
+    batch_size_per_card: 128
+    num_workers: 4
