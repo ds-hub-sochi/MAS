@@ -4,15 +4,15 @@ _base_ = [
     '_base_abinet.py',
 ]
 
-load_from = '/home/jovyan/people/murtazin/mmocr/checkpoints/abinet_pretrain.pth'
+load_from = '../mmocr/checkpoints/abinet_pretrain.pth'
 
 # 1. Dataset Settings
 dataset_type = 'RecogTextDataset'
-data_root = '/home/jovyan/people/murtazin/mmocr/data/uzbek'
+data_root = 'path/to/data/mmocr/data/arabic'
 
 train_ann_file = 'train_labels.jsonl'
 val_ann_file = 'val_labels.jsonl'
-dict_file = '/home/jovyan/people/murtazin/mmocr/data/uzbek/dict_uzbek.txt'
+dict_file = 'path/to/data/mmocr/data/arabic/dict_arabic.txt'
 
 train_pipeline = [
     dict(type='LoadImageFromFile', ignore_empty=True, min_size=2),
@@ -121,13 +121,13 @@ model = dict(
         std=[58.395, 57.12, 57.375]))
 
 # 3. Dataloader Settings
-uzbek_train = dict(
+arabic_train = dict(
     type='RecogTextDataset',
     data_root=data_root,
     ann_file=train_ann_file,
     pipeline=train_pipeline)
 
-uzbek_test = dict(
+arabic_test = dict(
     type='RecogTextDataset',
     data_root=data_root,
     ann_file=val_ann_file,
@@ -138,7 +138,7 @@ train_dataloader = dict(
     num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
-    dataset=uzbek_train)
+    dataset=arabic_train)
 
 test_dataloader = dict(
     batch_size=1,
@@ -146,13 +146,13 @@ test_dataloader = dict(
     persistent_workers=True,
     drop_last=False,
     sampler=dict(type='DefaultSampler', shuffle=False),
-    dataset=uzbek_test)
+    dataset=arabic_test)
 
 val_dataloader = test_dataloader
 
 # 4. Evaluation and Schedule
 val_evaluator = dict(
-    dataset_prefixes=['Uzbek'],
+    dataset_prefixes=['Arabic'],
     metrics=[
         dict(
             type='WordMetric',
@@ -168,7 +168,7 @@ train_cfg = dict(max_epochs=100, val_interval=1)
 
 # Model saving
 default_hooks = dict(
-    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=5, save_best='Uzbek/recog/word_acc_ignore_case', rule='greater'),
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=5, save_best='Arabic/recog/word_acc_ignore_case', rule='greater'),
     logger=dict(type='LoggerHook', interval=50),
 )
 

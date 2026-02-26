@@ -1,5 +1,5 @@
 Global:
-  model_name: uzbek_PP-OCRv5_server_rec
+  model_name: arabic_PP-OCRv5_server_rec
   debug: false
   use_gpu: true
 
@@ -9,7 +9,7 @@ Global:
   print_batch_step: 10
 
   # Output dirs
-  save_model_dir: ./output/uzbek_rec_server_mas_only
+  save_model_dir: ./output/arabic_rec_server_mas_only
   save_epoch_step: 10
   eval_batch_step: [0, 37]
   cal_metric_during_train: true
@@ -24,7 +24,7 @@ Global:
   infer_mode: false
 
   # Character dictionary
-  character_dict_path: /home/jovyan/people/murtazin/PaddleOCR/train_data/uzbek/dict_uzbek_paddle.txt
+  character_dict_path: path/to/data/PaddleOCR/train_data/arabic/dict_arabic_paddle.txt
   use_space_char: true
 
   # Sequence length / shapes
@@ -32,7 +32,7 @@ Global:
   d2s_train_image_shape: [3, 48, 640]
 
   distributed: false
-  save_res_path: ./output/rec/predicts_server_uzbek.txt
+  save_res_path: ./output/rec/predicts_server_arabic.txt
 
 
 Optimizer:
@@ -97,7 +97,7 @@ Train:
     data_dir: /
     ext_op_transform_idx: 0
     label_file_list:
-      - /home/jovyan/people/murtazin/PaddleOCR/train_data/uzbek/rec_gt_train.txt
+      - path/to/data/PaddleOCR/train_data/arabic/rec_gt_train.txt
     transforms:
       - DecodeImage:
           img_mode: BGR
@@ -138,7 +138,7 @@ Eval:
     name: SimpleDataSet
     data_dir: /
     label_file_list:
-      - /home/jovyan/people/murtazin/PaddleOCR/train_data/uzbek/rec_gt_val.txt
+      - path/to/data/PaddleOCR/train_data/arabic/rec_gt_val.txt
     transforms:
       - DecodeImage:
           img_mode: BGR

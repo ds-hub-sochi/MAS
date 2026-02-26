@@ -27,7 +27,7 @@ Global:
   infer_mode: false
 
   # >>> IMPORTANT: your generated dict (arabic historical charset) <<<
-  character_dict_path: /home/jovyan/people/murtazin/PaddleOCR/datasets/dict_mas_muharaf.txt
+  character_dict_path: path/to/data/PaddleOCR/datasets/dict_mas_muharaf.txt
   use_space_char: true
 
   # Sequence length / shapes
@@ -104,7 +104,7 @@ Train:
 
     # >>> IMPORTANT: your prepared PaddleOCR REC lists <<<
     label_file_list:
-      - /home/jovyan/people/murtazin/PaddleOCR/datasets/train_list_merged_with_muharaf.txt
+      - path/to/data/PaddleOCR/datasets/train_list_merged_with_muharaf.txt
 
     transforms:
       - DecodeImage:
@@ -146,7 +146,7 @@ Eval:
     name: SimpleDataSet
     data_dir: /
     label_file_list:
-      - /home/jovyan/people/murtazin/PaddleOCR/datasets/val_list.txt
+      - path/to/data/PaddleOCR/datasets/val_list.txt
 
     transforms:
       - DecodeImage:

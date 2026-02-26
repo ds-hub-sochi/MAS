@@ -1,6 +1,6 @@
 Global:
   # Base model family (kept for reference / inference export)
-  model_name: uzbek_PP-OCRv5_mobile_rec
+  model_name: arabic_PP-OCRv5_mobile_rec
   debug: false
   use_gpu: true
 
@@ -10,7 +10,7 @@ Global:
   print_batch_step: 10
 
   # Output dirs
-  save_model_dir: ./output/uzbek_rec_mas_only
+  save_model_dir: ./output/arabic_rec_mas_only
   save_epoch_step: 1
   eval_batch_step: [0, 74]
   cal_metric_during_train: true
@@ -27,7 +27,7 @@ Global:
   infer_mode: false
 
   # >>> IMPORTANT: your generated dict (arabic historical charset) <<<
-  character_dict_path: /home/jovyan/people/murtazin/PaddleOCR/train_data/uzbek/dict_uzbek_paddle.txt
+  character_dict_path: path/to/data/PaddleOCR/train_data/arabic/dict_arabic_paddle.txt
   use_space_char: true
 
   # Sequence length / shapes
@@ -35,7 +35,7 @@ Global:
   d2s_train_image_shape: [3, 48, 640]
 
   distributed: false
-  save_res_path: ./output/rec/predicts_uzbek.txt
+  save_res_path: ./output/rec/predicts_arabic.txt
 
 
 Optimizer:
@@ -104,7 +104,7 @@ Train:
 
     # >>> IMPORTANT: your prepared PaddleOCR REC lists <<<
     label_file_list:
-      - /home/jovyan/people/murtazin/PaddleOCR/train_data/uzbek/rec_gt_train.txt
+      - path/to/data/PaddleOCR/train_data/arabic/rec_gt_train.txt
 
     transforms:
       - DecodeImage:
@@ -146,7 +146,7 @@ Eval:
     name: SimpleDataSet
     data_dir: /
     label_file_list:
-      - /home/jovyan/people/murtazin/PaddleOCR/train_data/uzbek/rec_gt_val.txt
+      - path/to/data/PaddleOCR/train_data/arabic/rec_gt_val.txt
 
     transforms:
       - DecodeImage:

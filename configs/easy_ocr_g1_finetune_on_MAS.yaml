@@ -1,13 +1,13 @@
-experiment_name: uzbek_finetune_from_pretrained
-train_data: easyocr_data/uzbek_train
-valid_data: easyocr_data/uzbek_val
+experiment_name: arabic_finetune_from_pretrained
+train_data: easyocr_data/arabic_train
+valid_data: easyocr_data/arabic_val
 select_data: /
 batch_ratio: "1.0"
 total_data_usage_ratio: 1.0
 batch_size: 24
 valInterval: 400
 num_iter: 39500
-saved_model: '/home/jovyan/.EasyOCR/model/arabic.pth'
+saved_model: 'USER_HOME/.EasyOCR/model/arabic.pth'
 FT: True
 new_prediction: True
 optim: adadelta

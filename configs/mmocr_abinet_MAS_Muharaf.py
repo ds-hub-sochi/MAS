@@ -6,15 +6,15 @@ _base_ = [
     '_base_abinet.py',
 ]
 
-load_from = '/home/jovyan/people/murtazin/mmocr/checkpoints/abinet_pretrain.pth'
+load_from = 'path/to/data/mmocr/checkpoints/abinet_pretrain.pth'
 
 # 1. Dataset Settings
 dataset_type = 'RecogTextDataset'
-data_root = '/home/jovyan/people/murtazin/PaddleOCR/datasets/mmocr_anno'
+data_root = 'path/to/data/PaddleOCR/datasets/mmocr_anno'
 
 train_ann_file = 'train_mmocr.jsonl'
 val_ann_file = 'val_mmocr.jsonl'
-dict_file = '/home/jovyan/people/murtazin/PaddleOCR/datasets/mmocr_anno/dict_mmocr.txt'
+dict_file = 'path/to/data/PaddleOCR/datasets/mmocr_anno/dict_mmocr.txt'
 
 train_pipeline = [
     dict(type='LoadImageFromFile', ignore_empty=True, min_size=2),
