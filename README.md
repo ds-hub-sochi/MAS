@@ -20,6 +20,9 @@ Our research demonstrates that while modern LVLMs (like GPT-4o and Gemini) show 
 │   ├── easy_ocr_...        # EasyOCR G1 fine-tuning configs
 │   ├── mmocr_...           # MMOCR ABINet configs for MAS & Muharaf
 │   ├── paddle_...          # PaddleOCR Server/Mobile configs
+│   └── paper_arabic/       # lmms-eval compatible task for MAS evaluation
+│       ├── paper_arabic.yaml
+│       └── utils.py
 ├── README.md               # Project documentation
 └── .gitignore              # Tracking only configs and docs
 ```
@@ -30,6 +33,17 @@ This repository provides optimized configurations for:
 - **EasyOCR**: Lightweight CRNN-based model.
 - **PaddleOCR (PP-OCRv4/v5)**: Production-ready pipeline with Server and Mobile variants.
 - **MMOCR**: Modular framework featuring the ABINet architecture.
+
+## 🧪 Evaluation with `lmms-eval`
+
+We include a custom task configuration compatible with the [`lmms-eval`](https://github.com/EvolvingLMMs-Lab/lmms-eval) framework to facilitate benchmarking of Large Vision-Language Models (LVLMs) on the MAS dataset. The task is located under `configs/paper_arabic/` and includes the YAML configuration and custom utility scripts for data loading and metric computation.
+
+### 🏃‍♂️ Running the Evaluation
+To test different models on the dataset, run the following command:
+
+```bash
+python -m lmms_eval --model qwen2_5_vl --model_args pretrained=model_path --tasks paper_arabic --output_path results/test
+```
 
 ## 🚀 Key Findings
 
