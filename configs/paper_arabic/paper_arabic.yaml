@@ -1,0 +1,37 @@
+dataset_path: path/to/data
+dataset_name: arabic
+dataset_kwargs:
+  token: True
+  load_from_disk: True
+
+test_split: test
+task: "paper_arabic"
+output_type: generate_until
+
+# === Data mapping functions ===
+doc_to_visual: !function utils.paper_arabic_to_visual
+doc_to_text: !function utils.paper_arabic_doc_to_text
+doc_to_target: "text"
+
+# === Generation hyperparameters ===
+generation_kwargs:
+  max_new_tokens: 1024
+  temperature: 0
+  top_p: 1.0
+  num_beams: 1
+  do_sample: false
+
+# === Metrics and processing ===
+process_results: !function utils.paper_arabic_process_results
+
+metric_list:
+  - metric: paper_arabic_metrics
+    aggregation: !function utils.paper_arabic_aggregate_metrics
+    higher_is_better: false
+    
+lmms_eval_specific_kwargs:
+  default:
+    prompt: "You are an expert OCR engine specialized in handwritten historical documents. Transcribe **every** character exactly as it appears — preserve original spelling, punctuation, diacritics, ligatures, and archaic letters (ѣ, і, ѳ, etc.). Do **not** add, omit, normalize, correct, or format in any way. Output plain text only, matching the input one-to-one."
+
+metadata:
+  - version: 0.1
